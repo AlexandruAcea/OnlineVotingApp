@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { View, Text, List, ListItem } from "react-native";
+import { View, Text, FlatList } from "react-native";
+import ListItem from "./components/ListItem";
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -9,23 +10,36 @@ class HomeScreen extends Component {
     }
   };
 
+  rowPressed = () => {
+    const { navigate } = this.props.navigation;
+    navigate("DetailsScreen");
+  };
+
+  renderRow(item) {
+    return <ListItem titlu={item.titlu} func={this.rowPressed} />;
+  }
+
   render() {
     const { textStyle, containerStyle } = styles;
     return (
       <View style={containerStyle}>
-        <Text style={textStyle}>
-          Momentan nu exista niciun vot,{"\n"}va rugam reveniti!
-        </Text>
+        <FlatList
+          data={list}
+          renderItem={({ item }) => this.renderRow(item)}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </View>
     );
   }
 }
 
+const list = [{ titlu: "Europarlamentare" }, { titlu: "Prezidentiale" }];
+
 const styles = {
   containerStyle: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: "80%"
+    height: "80%",
+    flex: 1,
+    paddingTop: 30
   },
 
   textStyle: {
